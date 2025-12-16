@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>English Daily Conversation Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            padding: 40px;
+        }
+        .quiz-box {
+            background: #fff;
+            max-width: 650px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .option {
+            margin: 8px 0;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #007BFF;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .score {
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-box">
+    <h2>English Daily Conversation Practice</h2>
+    <p id="situation"></p>
+    <p id="question"></p>
+
+    <div id="options"></div>
+
+    <button onclick="submitAnswer()">Submit</button>
+
+    <div class="result" id="result"></div>
+    <div class="score" id="score"></div>
+</div>
+
+<script>
+const quizData = [
+    {
+        situation: "You are at a coffee shop.",
+        question: "What do you say to order a coffee?",
+        options: [
+            "Where is the station?",
+            "I’d like a cup of coffee, please.",
+            "How old are you?"
+        ],
+        answer: 1
+    },
+    {
+        situation: "You meet someone for the first time.",
+        question: "What should you say?",
+        options: [
+            "Nice to meet you.",
+            "What time is it?",
+            "How much is this?"
+        ],
+        answer: 0
+    },
+    {
+        situation: "You are in a restaurant.",
+        question: "How do you ask for the menu?",
+        options: [
+            "Can I see the menu, please?",
+            "Where is the bathroom?",
+            "I need a doctor."
+        ],
+        answer: 0
+    },
+    {
+        situation: "You want to know the time.",
+        question: "What do you ask?",
+        options: [
+            "What day is today?",
+            "What time is it?",
+            "Where are you from?"
+        ],
+        answer: 1
+    },
+    {
+        situation: "You are shopping.",
+        question: "How do you ask the price?",
+        options: [
+            "How much is this?",
+            "Can you help me?",
+            "What is your name?"
+        ],
+        answer: 0
+    },
+    {
+        situation: "You need help at work.",
+        question: "What should you say?",
+        options: [
+            "Can you help me, please?",
+            "I am hungry.",
+            "This is my friend."
+        ],
+        answer: 0
+    },
+    {
+        situation: "You want to leave politely.",
+        question: "What do you say?",
+        options: [
+            "See you later.",
+            "What is this?",
+            "Turn left."
+        ],
+        answer: 0
+    },
+    {
+        situation: "You ask about the weather.",
+        question: "What do you say?",
+        options: [
+            "How’s the weather today?",
+            "Where is the bank?",
+            "What time is lunch?"
+        ],
+        answer: 0
+    },
+    {
+        situation: "You are taking a taxi.",
+        question: "What do you say?",
+        options: [
+            "Please take me to the airport.",
+            "How old is the building?",
+            "What is your job?"
+        ],
+        answer: 0
+    },
+    {
+        situation: "You want to say thank you.",
+        question: "What should you say?",
+        options: [
+            "Sorry.",
+            "Thank you very much.",
+            "Excuse me."
+        ],
+        answer: 1
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function loadQuestion() {
+    const q = quizData[currentQuestion];
+    document.getElementById("situation").innerHTML =
+        "<strong>Situation:</strong> " + q.situation;
+    document.getElementById("question").innerHTML =
+        "<strong>Question:</strong> " + q.question;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach((option, index) => {
+        optionsDiv.innerHTML += `
+            <div class="option">
+                <input type="radio" name="answer" value="${index}">
+                ${option}
+            </div>
+        `;
+    });
+
+    document.getElementById("result").textContent = "";
+}
+
+function submitAnswer() {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    const result = document.getElementById("result");
+
+    if (!selected) {
+        result.textContent = "Please choose an answer.";
+        result.style.color = "orange";
+        return;
+    }
+
+    if (parseInt(selected.value) === quizData[currentQuestion].answer) {
+        result.textContent = "Correct! ✅";
+        result.style.color = "green";
+        score++;
+    } else {
+        result.textContent = "Incorrect ❌";
+        result.style.color = "red";
+    }
+
+    currentQuestion++;
+
+    document.getElementById("score").textContent =
+        `Score: ${score} / ${quizData.length}`;
+
+    if (currentQuestion < quizData.length) {
+        setTimeout(loadQuestion, 1000);
+    } else {
+        setTimeout(() => {
+            document.querySelector(".quiz-box").innerHTML = `
+                <h2>Quiz Finished 🎉</h2>
+                <p>Your final score: ${score} / ${quizData.length}</p>
+            `;
+        }, 1000);
+    }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
